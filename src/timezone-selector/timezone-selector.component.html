@@ -1,0 +1,56 @@
+<div class="zone-search">
+  <p-autoComplete #autoComplete [(ngModel)]="searchText"
+      i18n-placeholder
+      placeholder="Search cities/timezones"
+      [suggestions]="matchZones"
+      [forceSelection]="true"
+      [showEmptyMessage]="true"
+      [emptyMessage]="emptyMessage"
+      (completeMethod)="searchSelect($event)"
+      (onKeyUp)="checkForEnter($event)"
+      [autofocus]="autofocus"
+      [disabled]="disabled"
+      appendTo="body"></p-autoComplete>
+  <i class="pi pi-search" [style.opacity]="disabled ? 0.33 : 1"></i>
+  <i class="fas fa-spinner fa-pulse fa-fw" [style.display]="searching ? 'block' : 'none'"></i>
+  <p-menu #recents [popup]="true" [model]="recentItems" appendTo="body"
+      (onShow)="recentsShown()" (onHide)="recentsOpen = false"></p-menu>
+  <i class="pi pi-chevron-down p-inputtext" (click)="recents.toggle($event)" [class.icon-disabled]="disabled"></i>
+</div>
+
+<div class="mode-selector">
+  <p-radioButton [value]="true" [disabled]="disabled" [(ngModel)]="selectByOffset"
+      i18n-label label="By UTC offset"></p-radioButton>
+  &nbsp;&nbsp;
+  <p-radioButton [value]="false" [disabled]="disabled" [(ngModel)]="selectByOffset"
+      i18n-label label="By region"></p-radioButton>
+</div>
+
+<div class="zone-selector">
+  <div class="by-region" [style.opacity]="+!selectByOffset" [style.pointer-events]="selectByOffset ? 'none' : 'auto'">
+    <p-dropdown tzeDropdownFix [autoDisplayFirst]="false"
+         [options]="regions" [(ngModel)]="region"  [disabled]="disabled || selectByOffset" (focus)="onDropdownFocus($event)"
+         appendTo="body" (blur)="onDropdownBlur($event)"></p-dropdown>
+    <div i18n class="caption" [style.opacity]="disabled ? 0.33 : 1">Timezone region/category</div>
+
+    <p-dropdown tzeDropdownFix [autoDisplayFirst]="false"
+         [options]="subzones" [(ngModel)]="subzone"
+         [disabled]="disabled || selectByOffset || subzones.length === 0"
+         (focus)="onDropdownFocus($event)"
+         appendTo="body" (blur)="onDropdownBlur($event)"></p-dropdown>
+    <div i18n class="caption" [style.opacity]="disabled ? 0.33 : 1">Specific timezone</div>
+  </div>
+
+  <div class="by-offset" [style.opacity]="+selectByOffset" [style.pointer-events]="selectByOffset ? 'auto' : 'none'">
+    <p-dropdown tzeDropdownFix [autoDisplayFirst]="false"
+         [options]="offsets"  [(ngModel)]="offset"  [disabled]="disabled || !selectByOffset" (focus)="onDropdownFocus($event)"
+         appendTo="body" (blur)="onDropdownBlur($event)"></p-dropdown>
+    <div i18n class="caption" [style.opacity]="disabled ? 0.33 : 1">UTC offset/DST</div>
+
+    <p-dropdown tzeDropdownFix [autoDisplayFirst]="false"
+         [options]="zones" [(ngModel)]="zone" [disabled]="disabled || !selectByOffset" (focus)="onDropdownFocus($event)"
+         appendTo="body" (blur)="onDropdownBlur($event)"></p-dropdown>
+    <div i18n class="caption" [style.opacity]="disabled ? 0.33 : 1">Specific timezone</div>
+  </div>
+  <p [hidden]="!error" class="error">{{error}}</p>
+</div>

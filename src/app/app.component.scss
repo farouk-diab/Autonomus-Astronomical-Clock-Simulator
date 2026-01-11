@@ -1,0 +1,940 @@
+@import "../colors";
+
+.wrapper {
+  box-sizing: border-box;
+  display: grid;
+  font-family: Horologium, NoEmojiAstronomy, sans-serif;
+  gap: 12px;
+  grid-template-columns: 1fr 400px;
+  min-height: var(--mfvh);
+  place-items: center;
+  padding: 8px;
+
+  &.collapsed {
+    grid-template-columns: 1fr 160px;
+  }
+
+  &.narrow {
+    grid-template-columns: 1fr auto;
+  }
+}
+
+p-toast, p-confirmDialog {
+  position: absolute; // Prevent these items from adding grid gap.
+}
+
+.controls {
+  align-items: center;
+  align-self: start;
+  background-color: $controls-background;
+  color: $controls-text;
+  display: flex;
+  flex-direction: column;
+  font: 14px Arial, sans-serif;
+  gap: 4px;
+  grid-area: 1 / 2;
+  justify-self: end;
+  min-height: 400px;
+  min-width: 400px;
+  padding: 1em 0.5em;
+  position: relative;
+  transition-duration: 0.5s;
+  transition-property: height, margin, min-height, min-width, transform, width;
+  transition-timing-function: ease-in-out;
+
+  &.short {
+    margin: -20px;
+    transform: scale(0.9);
+  }
+
+  &.extra-short {
+    margin: -40px;
+    transform: scale(0.8);
+  }
+
+  .place-name-group {
+    align-items: center;
+    display: flex;
+    margin: 0 2em;
+    padding-bottom: 0.5em;
+    opacity: 1;
+    position: relative;
+    transition: opacity 0.5s ease-in-out;
+    top: 0;
+
+    &.collapsed {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .place-name {
+      font-weight: bold;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .no-name {
+      font-style: italic;
+      opacity: 0.33;
+    }
+
+    input {
+      margin: -4px 0;
+    }
+
+    .height-holder {
+      display: inline-block;
+      width: 1px;
+    }
+
+    i.pi-pencil, i.pi-save, i.pi-undo {
+      cursor: pointer;
+      padding: 0.5em;
+      position: absolute;
+      right: -2em;
+      top: -0.5em;
+    }
+
+    i.pi-undo {
+      right: -3.5em;
+    }
+  }
+
+  i.pi-caret-left, i.pi-caret-right {
+    cursor: pointer;
+    font-size: 1.75em;
+    opacity: 0.75;
+    padding: 0.125em;
+  }
+
+  i.pi-bars, i.pi-plus {
+    cursor: pointer;
+    padding: 0.5em;
+    position: absolute;
+    left: 0;
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+    top: 0;
+
+    &.collapsed {
+      opacity: 0;
+    }
+  }
+
+  i.pi-plus {
+    left: 2em;
+
+    &.collapsed {
+      pointer-events: none;
+    }
+  }
+
+  i.pi-chevron-down {
+    cursor: pointer;
+    padding: 0.5em;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: transform 0.5s ease-in-out;
+
+    &.collapsed {
+      transform: rotate(90deg);
+    }
+  }
+
+  i.pi-info-circle {
+    background: inherit;
+    bottom: 0;
+    cursor: pointer;
+    display: block;
+    padding: 0.5em;
+    position: absolute;
+    right: 0;
+
+    &.collapsed {
+      padding: 0.5em 0 0.5em 0.5em;
+      right: 1.5em;
+      top: 0;
+      width: 2em;
+    }
+  }
+
+  .time-text {
+    background: inherit;
+    bottom: 0;
+    display: none;
+    font: 14px Verdana, sans-serif;
+    font-variant-numeric: tabular-nums;
+    padding: 0.5em 0 0.5em 0.5em;
+    position: absolute;
+    right: 4em;
+    top: 0;
+    white-space: nowrap;
+
+    &.collapsed {
+      display: block;
+    }
+
+    &.track-time {
+      color: #0A0;
+    }
+  }
+
+  ::ng-deep .p-checkbox-label {
+    white-space: nowrap;
+  }
+
+  tbw-time-editor {
+    min-height: 34px;
+  }
+
+  tbw-angle-editor, tbw-time-editor {
+    font-size: 18px;
+  }
+
+  .time-row {
+    fa-icon {
+      cursor: pointer;
+      margin-left: 0.75em;
+
+      &.disabled {
+        cursor: default;
+        opacity: 0.33;
+      }
+    }
+  }
+
+  tze-zone-selector {
+    margin: 0.5em 0;
+  }
+
+  #now {
+    margin: -4px 0;
+  }
+
+  &.collapsed {
+    height: 2.25em;
+    margin-left: -2em;
+    min-height: 2.25em;
+    min-width: 2em;
+    width: 2em;
+    overflow-x: visible;
+    overflow-y: clip;
+
+    .button-row,
+    .time-row,
+    tze-zone-selector {
+      opacity: 0;
+      pointer-events: none;
+    }
+  }
+}
+
+svg {
+  align-self: start;
+  grid-area: 1 / 1;
+  height: calc(max(min(calc(100vw - 400px), var(--mfvh)) - 28px, 320px));
+  min-height: 320px;
+  min-width: 320px;
+  margin: 0;
+  transition-duration: 0.5s;
+  transition-property: height, width;
+  transition-timing-function: ease-in-out;
+  user-select: none;
+  width: calc(max(min(calc(100vw - 400px), var(--mfvh)) - 28px, 320px));
+
+  &.controls-collapsed {
+    height: calc(max(var(--mfvh) - 16px, 320px));
+    width: calc(min(max(var(--mfvh) - 16px, 320px), calc(100vw - 28px)));
+
+    &.show-info-panel {
+      height: calc(min(max(var(--mfvh) - 16px, 320px), calc(100vw - 200px)));
+      width: calc(min(max(var(--mfvh) - 16px, 320px), calc(100vw - 200px)));
+    }
+  }
+}
+
+#svg-wrapper {
+  align-self: start;
+  justify-self: start;
+  position: relative;
+
+  &.wide {
+    align-self: center;
+    justify-self: center;
+  }
+}
+
+.svg-overlay {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.info-panel-overlay {
+  font-size: calc(14px * var(--font-scaler));
+  position: static;
+
+  &.expanded {
+    bottom: 0.5em;
+    position: fixed;
+    right: 0.5em;
+  }
+}
+
+.info-panel {
+  background-color: $controls-background;
+  border: 1px solid #999;
+  box-sizing: border-box;
+  color: $controls-text;
+  font-size: 1em;
+  font-family: NoEmojiAstronomy, Arial, sans-serif;
+  max-width: 400px;
+  padding: 0.5em 2.5em 0.5em 0.5em;
+  position: relative;
+
+  .closer {
+    cursor: pointer;
+    padding: 0.5em;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  td {
+    white-space: nowrap;
+  }
+
+  .num {
+    color: #64B5F6;
+    font: 0.9em NoEmojiAstronomy, Verdana, sans-serif;
+    min-width: 4.2em;
+    white-space: nowrap;
+  }
+
+  .diff {
+    color: #F63;
+    font: 0.9em Verdana, sans-serif;
+    white-space: nowrap;
+  }
+
+  .wide {
+    min-width: 10.5em;
+  }
+
+  .recalibration {
+    padding: 0.5em 0;
+  }
+
+  .time-grid {
+    align-items: baseline;
+    display: grid;
+    gap: 0.33em;
+    grid-template-columns: auto auto;
+    justify-content: start;
+  }
+
+  table {
+    border-spacing: 1em 0;
+    margin-left: -1em;
+    margin-right: -2.5em;
+  }
+}
+
+.below-control-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+}
+
+#globe-host {
+  border-radius: 50%;
+  left: 36.333%;
+  height: 27.333%;
+  overflow: hidden;
+  position: absolute;
+  top: 36.333%;
+  transform: scale(-1, -1);
+  width: 27.333%;
+
+  &.no-web-gl {
+    transform: unset;
+  }
+}
+
+@media
+  screen and (orientation: landscape) and (max-height: 420px),
+  screen and (orientation: portrait) and (max-height: 1000px) {
+  .controls {
+    margin: -20px;
+    transform: scale(0.9);
+
+    &.collapsed {
+      margin: -2px;
+    }
+  }
+}
+
+@media screen and (max-height: 600px) {
+  .info-panel {
+    bottom: 8px;
+    left: unset;
+    position: fixed;
+    right: 8px;
+    top: unset;
+  }
+}
+
+@media screen and (orientation: portrait) and (max-height: 380px) {
+  .controls {
+    margin: -40px;
+    transform: scale(0.8);
+
+    &.collapsed {
+      margin: -4px -40px;
+    }
+  }
+}
+
+@media screen and (orientation: portrait) {
+  .wrapper {
+    grid-template-columns: auto;
+    grid-template-rows: auto 1fr auto;
+    overflow: auto;
+
+    &.collapsed, &.narrow {
+      grid-template-columns: auto;
+    }
+  }
+
+  #svg-wrapper {
+    align-self: center;
+    justify-self: center;
+  }
+
+  .controls {
+    grid-area: unset;
+    justify-self: center;
+
+    &.collapsed {
+      margin-left: 0;
+      min-width: 320px;
+      width: 320px;
+    }
+
+    i.pi-bars.collapsed {
+      opacity: 1;
+    }
+
+    .time-text {
+      left: 50%;
+      padding: 0.5em;
+      right: unset;
+      transform: translate(-50%, 0);
+    }
+  }
+
+  svg {
+    grid-area: unset;
+    height: calc(min(calc(100vw - 16px), calc(var(--mfvh) - 440px)));
+    width: calc(min(calc(100vw - 16px), calc(var(--mfvh) - 440px)));
+
+    &.controls-collapsed {
+      height: calc(max(min(var(--mfvh) - 28px - 2.25em, 100vw - 16px), 320px));
+      width: calc(max(min(var(--mfvh) - 28px - 2.25em, 100vw - 16px), 320px));
+
+      &.show-info-panel {
+        height: calc(max(min(var(--mfvh) - 40px - calc(260px * var(--font-scaler)) - 2.25em, 100vw - 16px), 320px));
+        width: calc(max(min(var(--mfvh) - 40px - calc(260px * var(--font-scaler)) - 2.25em, 100vw - 16px), 320px));
+      }
+    }
+  }
+
+  .below-control-panel {
+    display: none;
+  }
+}
+
+@media screen and (orientation: landscape) {
+  .info-panel-overlay {
+    bottom: 0.5em;
+    position: fixed;
+    right: 0.5em;
+  }
+}
+
+@media screen and (orientation: landscape) and (min-width: 740px) {
+  #svg-wrapper {
+    align-self: center;
+    justify-self: center;
+  }
+}
+
+.button-row {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+}
+
+.time-row {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  margin-bottom: 0.67rem;
+}
+
+#graphics-credit {
+  bottom: 16px;
+  color: #CCC;
+  font: italic 14px sans-serif;
+  left: 16px;
+  opacity: 1;
+  position: fixed;
+  transition: opacity 2s ease-in-out;
+}
+
+.maskBlack {
+  fill: black;
+}
+
+.maskWhite {
+  fill: white;
+
+  .hole {
+    fill: black;
+  }
+}
+
+.textPath {
+  stroke: none;
+  fill: none;
+}
+
+.baseCircle {
+  stroke: $gold-trim;
+  stroke-width: 3px;
+  fill: none;
+}
+
+.ring-gap {
+  stroke: #4D4D4D;
+  stroke-width: 8px;
+  fill: none;
+}
+
+.midnightSunCircle {
+  stroke: #BCD;
+  stroke-width: 3px;
+  fill: none;
+}
+
+.midnightSunColor {
+  fill: #4799AE;
+}
+
+.innerCircle {
+  fill: #639EA4;
+}
+
+.eclipticWheel {
+  opacity: 1;
+  transition: opacity 1s ease-in-out;
+}
+
+.eclipticSymbol {
+  font-size: 85px;
+  text-anchor: middle;
+  fill: $gold-trim;
+}
+
+.signsArea {
+  stroke: none;
+  fill: #276091;
+}
+
+.handSymbol {
+  stroke: black;
+  stroke-width: 0.25;
+  fill: #EED68D;
+}
+
+.sunBeamLargeSymbol {
+  fill: $gold-trim;
+}
+
+.sunBeamSmallSymbol {
+  fill: $gold-trim;
+}
+
+.leverRafieSymbol {
+  fill: $dark-metal;
+  opacity: 1;
+  stroke: $metal-edge;
+  stroke-width: 0.5;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.leverRafieGolden {
+  stroke: $gold-trim;
+  stroke-width: 5px;
+}
+
+.leverSymbol {
+  stroke: none;
+  fill: $dark-metal;
+}
+
+.hourAngleStarSymbol {
+  stroke: none;
+  fill: $gold-trim;
+}
+
+.moonDark {
+  stroke: none;
+  fill: url("#gradientMoonSphereDark");
+}
+
+.moonSunlit {
+  stroke: none;
+  fill: #DDD;
+}
+
+.moonSphere {
+  stroke: none;
+  fill: url("#gradientMoonSphere");
+}
+
+.sunSphere {
+  stroke: none;
+  fill: url("#gradientSunSphere");
+}
+
+.pin {
+  stroke: none;
+  fill: $dark-metal;
+}
+
+.pinSphere {
+  stroke: none;
+  fill: url("#gradientMoonSphereDark");
+}
+
+.sun-moon-arms {
+  fill: $dark-metal;
+}
+
+.sun-moon-guides {
+  fill: $dark-metal;
+  stroke: $metal-edge;
+  stroke-width: 0.66;
+}
+
+.moon-ring-edge {
+  fill: none;
+  stroke: $metal-edge;
+  stroke-width: 5;
+}
+
+.moon-ring {
+  fill: none;
+  stroke: $dark-metal;
+  stroke-width: 4;
+}
+
+.outerRingBackground {
+  stroke: none;
+  fill: #0E3D64;
+}
+
+.outerRingBorder {
+  stroke: $gold-trim;
+  stroke-width: 4px;
+  fill: none;
+}
+
+.eventText {
+  fill: black;
+  text-anchor: middle;
+
+  tspan {
+    alignment-baseline: central;
+  }
+
+  &.sol-noctis {
+    font-size: 10px;
+  }
+}
+
+.latitude-text {
+  fill: #C5B983;
+  font-size: 8px;
+  text-anchor: middle;
+
+  &.smaller {
+    font-size: 7px;
+  }
+
+  tspan {
+    alignment-baseline: central;
+  }
+}
+
+.unequalHourArea {
+  stroke: none;
+}
+
+.unequalHourBorder {
+  stroke: $gold-trim;
+  fill: none;
+}
+
+.unequalHour6 {
+  fill: #1085AE;
+}
+
+.unequalHour5 {
+  fill: #0D8AB0;
+}
+
+.unequalHour4 {
+  fill: #1992B2;
+}
+
+.unequalHour3 {
+  fill: #4799AE;
+}
+
+.unequalHour2 {
+  fill: #8CA8A7;
+}
+
+.unequalHour1 {
+  fill: #B0BAB1;
+}
+
+.horizonArea {
+  fill: #E58A20;
+
+  &.center {
+    stroke: none;
+  }
+}
+
+.darkArea {
+  fill: #172A38;
+}
+
+.post-2018 {
+  .midnightSunColor {
+    fill: $sky-color-2018;
+  }
+
+  .innerCircle {
+    fill: $sky-color-2018;
+  }
+
+  .signsArea {
+    fill: $dark-background-2018;
+  }
+
+  .outerRingBackground {
+    fill: $dark-background-2018;
+  }
+
+  .unequalHour6 {
+    fill: $sky-color-2018;
+  }
+
+  .unequalHour5 {
+    fill: $sky-color-2018;
+  }
+
+  .unequalHour4 {
+    fill: $sky-color-2018;
+  }
+
+  .unequalHour3 {
+    fill: $sky-color-2018;
+  }
+
+  .unequalHour2 {
+    fill: $sky-color-2018;
+  }
+
+  .unequalHour1 {
+    fill: $sky-color-2018;
+  }
+
+  .horizonArea {
+    fill: url("#dawn-dusk-gradient");
+  }
+
+  .darkArea {
+    fill: $dark-background-2018;
+  }
+
+  #globe-host {
+    border: 2px $gold-trim solid;
+  }
+
+  .eclipticSymbol,
+  .handSymbol,
+  .hourAngleStarSymbol,
+  .outerRingText,
+  .sunBeamLargeSymbol,
+  .sunBeamSmallSymbol,
+  .timeText {
+    fill: $gold-trim-2018;
+  }
+
+  .baseCircle,
+  .eclipticCircle,
+  .eclipticDial,
+  .leverRafieGolden,
+  .outerRingBorder,
+  .unequalHourBorder {
+    stroke: $gold-trim-2018;
+  }
+}
+
+.orig-1410 {
+  .midnightSunColor {
+    fill: $sky-color-1410;
+  }
+
+  .innerCircle {
+    fill: $sky-color-1410;
+  }
+
+  .signsArea {
+    fill: $dark-background-1410;
+  }
+
+  .outerRingBackground {
+    fill: $dark-background-1410;
+  }
+
+  .unequalHour6 {
+    fill: $sky-color-1410;
+  }
+
+  .unequalHour5 {
+    fill: $sky-color-1410;
+  }
+
+  .unequalHour4 {
+    fill: $sky-color-1410;
+  }
+
+  .unequalHour3 {
+    fill: $sky-color-1410;
+  }
+
+  .unequalHour2 {
+    fill: $sky-color-1410;
+  }
+
+  .unequalHour1 {
+    fill: #95C1D2;
+  }
+
+  .horizonArea {
+    fill: #B31919;
+  }
+
+  .darkArea {
+    fill: $dark-background-1410;
+  }
+
+  #globe-host {
+    border: 2px $gold-trim solid;
+  }
+
+  .handSymbol {
+    fill: #D6BD90;
+  }
+
+  .eclipticSymbol,
+  .hourAngleStarSymbol,
+  .outerRingText,
+  .timeText {
+    fill: $gold-trim-1410;
+  }
+
+  .sunBeamLargeSymbol,
+  .sunBeamSmallSymbol {
+    fill: #D9BD88;
+  }
+
+  .baseCircle,
+  .eclipticCircle,
+  .eclipticDial,
+  .outerRingBorder,
+  .unequalHourBorder {
+    stroke: $gold-trim-1410;
+  }
+
+  .leverRafieGolden,
+  .moon-ring {
+    stroke: $dark-metal-1410;
+  }
+
+  .leverRafieSymbol,
+  .leverSymbol,
+  .pin,
+  .sun-moon-arms,
+  .sun-moon-guides {
+    fill: $dark-metal-1410;
+  }
+
+  .ring-gap {
+    stroke: #9CA5A8;
+  }
+}
+
+#moon-true, #sun-true, #mercury, #venus, #mars, #jupiter, #saturn {
+  stroke-width: 0.5;
+  stroke: #4D4D4D;
+
+  text {
+    fill: black;
+    font: 9px Arial, sans-serif;
+    text-anchor: middle;
+  }
+}
+
+:lang(fr) ::ng-deep {
+  .now {
+    margin: 0 -10px;
+    transform: scale(0.85, 1);
+  }
+
+  #track-time label {
+    line-height: 0.9;
+    max-width: 90px;
+    white-space: normal !important;
+    width: 90px;
+  }
+}
+
+:lang(de) ::ng-deep {
+  #disable-dst label {
+    line-height: 0.9;
+    margin-bottom: -5px;
+    margin-top: -5px;
+    max-width: 140px;
+    white-space: normal !important;
+    width: 140px;
+  }
+
+  #track-time label {
+    line-height: 0.9;
+    max-width: 110px;
+    white-space: normal !important;
+    width: 110px;
+  }
+}

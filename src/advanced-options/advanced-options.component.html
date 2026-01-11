@@ -1,0 +1,38 @@
+<i class="pi pi-times closer" (click)="hide()"></i>
+<div i18n class="header">Advanced Options</div>
+
+<div class="appearance">
+  <p-dropdown tzeDropdownFix [autoDisplayFirst]="false"
+     [style]="{ 'min-width': '250px', 'max-width': '290px' }"
+     [options]="appearanceOptions" [(ngModel)]="settingsHolder.appearance" appendTo="body"></p-dropdown>
+  <div class="background-input-wrapper">
+    <div class="reset" (click)="settingsHolder.background = '#4D4D4D'">
+      <i class="pi pi-undo" [style.opacity]="settingsHolder.background === '#4D4D4D' ? '0' : '1'"></i>
+    </div>
+    <label i18n for="app-background">Background</label>
+    <input id="app-background" name="clock-background" type="color" [(ngModel)]="settingsHolder.background">
+  </div>
+</div>
+
+<p-checkbox [(ngModel)]="settingsHolder.translucentEcliptic" [binary]="true"
+    i18n-label label="Translucent ecliptic"></p-checkbox>
+
+<p-checkbox [(ngModel)]="settingsHolder.detailedMechanism" [binary]="true"
+    i18n-label label="Mechanically detailed clock face"></p-checkbox>
+
+<p-checkbox [(ngModel)]="settingsHolder.animateBySiderealDays" [binary]="true"
+    i18n-label label="Fast animation uses sidereal days"></p-checkbox>
+
+<p-checkbox [(ngModel)]="settingsHolder.fasterGraphics" [binary]="true"
+    i18n-label label="Faster graphics / less shading"></p-checkbox>
+
+<p-checkbox [(ngModel)]="settingsHolder.realPositionMarkers" [binary]="true"
+    i18n-label label="Sun/moon real position markers"></p-checkbox>
+
+<p-checkbox [(ngModel)]="settingsHolder.additionalPlanets" [binary]="true"
+    i18n-label label="Additional planet markers"></p-checkbox>
+<p-checkbox [(ngModel)]="settingsHolder.showInfoPanel" [binary]="true"
+    i18n-label label="Show info panel"></p-checkbox>
+
+<p-dropdown tzeDropdownFix [autoDisplayFirst]="false" class="timing" [panelStyle]="{ 'font-size': '13px' }"
+   [options]="timingOptions" [(ngModel)]="settingsHolder.timing" appendTo="body"></p-dropdown>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pražský Orloj - Simulator incompatible with your web browser</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <base href="./">
+<style>
+  body {
+    background: #0E3D64;
+    color: white;
+    font: 14px Arial, Helvetica, sans-serif;
+    margin: 1em;
+  }
+
+  a {
+    color: #6AF;
+    font: 14px Arial, Helvetica, sans-serif;
+  }
+  a:active, a:hover { color: #9DF; }
+  a:visited { color: #6AF; }
+</style>
+</head>
+<body>
+  <script>
+    var msg = (/\bmsg=([^&]*)/.exec(location.search) || [])[1];
+
+    if (msg)
+      document.write('<p style="color: #F9B">' + decodeURIComponent(msg) + '</p>');
+
+    if (history.replaceState && location.href.indexOf('?') >= 0)
+        history.replaceState(undefined, undefined, location.href.replace(/\?.*$/, ''));
+  </script>
+  <div>
+    <p>Your web browser does not have the capabilities needed to run the simulator.
+      Please try again with a more up-to-date web browser.</p>
+    <!-- cspell:disable -->
+    <p>Váš webový prohlížeč nemá schopnosti potřebné ke spuštění simulátoru.
+      Zkuste to prosím znovu s aktuálnějším webovým prohlížečem.</p>
+    <p>Ihr Webbrowser verfügt nicht über die zum Ausführen des Simulators erforderlichen Funktionen.
+      Bitte versuchen Sie es erneut mit einem aktuelleren Webbrowser.</p>
+    <p>Su navegador web no tiene las capacidades necesarias para ejecutar el simulador.
+      Vuelva a intentarlo con un navegador web más actualizado.</p>
+    <p>Votre navigateur Web n'a pas les capacités nécessaires pour exécuter le simulateur.
+      Veuillez réessayer avec un navigateur Web plus récent.</p>
+    <a href="https://orloj.eu">orloj.eu</a>
+  </div>
+</body>
+</html>
